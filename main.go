@@ -5,6 +5,7 @@ import (
 	"oms-system/config"
 	"oms-system/models"
 	"oms-system/routes"
+	"os"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -42,5 +43,11 @@ func main() {
 	routes.SetupRoutes(r)
 
 	// run
-	r.Run(":8081")
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = "8081"
+	}
+
+	r.Run(":" + port)
 }
