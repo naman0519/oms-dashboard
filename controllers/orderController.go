@@ -190,43 +190,67 @@ func DeleteOrder(c *gin.Context) {
 // ========================================
 // ADMIN LOGIN
 // ========================================
+// func AdminLogin(c *gin.Context) {
+// 	email := strings.TrimSpace(c.PostForm("email"))
+// 	password := strings.TrimSpace(c.PostForm("password"))
+
+// 	//Admin record database se fetch karo
+// 	var admin models.Admin
+// 	if err := config.DB.Where("username = ?", "admin").First(&admin).Error; err != nil {
+// 		c.HTML(401, "login.html", gin.H{
+// 			"error": "Admin account not found",
+// 		})
+// 		return
+// 	}
+
+// 	// Email verify (login page par admin@gmail.com use kar rahe ho)
+// 	if email != "admin@gmail.com" {
+// 		c.HTML(401, "login.html", gin.H{
+// 			"error": "Invalid email or password",
+// 		})
+// 		return
+// 	}
+
+// 	// Password verify using bcrypt hash stored in database
+// 	if password != "123456" {
+// 		c.HTML(401, "login.html", gin.H{
+// 			"error": "Invalid password",
+// 		})
+// 		return
+// 	}
+
 func AdminLogin(c *gin.Context) {
+
 	email := strings.TrimSpace(c.PostForm("email"))
 	password := strings.TrimSpace(c.PostForm("password"))
 
-	// Admin record database se fetch karo
-	var admin models.Admin
-	if err := config.DB.Where("username = ?", "admin").First(&admin).Error; err != nil {
-		c.HTML(401, "login.html", gin.H{
-			"error": "Admin account not found",
-		})
-		return
-	}
+	// Simple fixed login
+	if email != "admin@gmail.com" || password != "123456" {
 
-	// Email verify (login page par admin@gmail.com use kar rahe ho)
-	if email != "admin@gmail.com" {
 		c.HTML(401, "login.html", gin.H{
 			"error": "Invalid email or password",
 		})
-		return
-	}
 
-	// Password verify using bcrypt hash stored in database
-	if password != "123456" {
-		c.HTML(401, "login.html", gin.H{
-			"error": "Invalid password",
-		})
 		return
 	}
 
 	// Session create
 	session := sessions.Default(c)
-	session.Set("admin", true)
+	session.Set("admin", email)
 	session.Save()
 
-	// Redirect to dashboard
+	// Dashboard redirect
 	c.Redirect(302, "/dashboard")
 }
+
+// 	// Session create
+// 	session := sessions.Default(c)
+// 	session.Set("admin", true)
+// 	session.Save()
+
+// 	// Redirect to dashboard
+// 	c.Redirect(302, "/dashboard")
+// }
 
 // ========================================
 // LOGOUT
