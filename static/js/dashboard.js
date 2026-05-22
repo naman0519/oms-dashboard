@@ -312,6 +312,6 @@ function filterOrdersByDate() {
 }
 
 function setTodayOrders() {
-    // Future enhancement
+    filteredOrders = [...allOrders];
     renderDashboard();
 }
