@@ -5,7 +5,6 @@ import (
 	"oms-system/config"
 	"oms-system/models"
 	"strings"
-	"time"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -15,26 +14,33 @@ import (
 // CREATE ORDER
 // ========================================
 func CreateOrder(c *gin.Context) {
-	var order models.Order
 
-	// JSON bind
-	if err := c.ShouldBindJSON(&order); err != nil {
+	var data map[string]interface{}
+
+	// JSON read
+	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(400, gin.H{
 			"error": "Invalid input",
 		})
 		return
 	}
 
-	// Default status
-	order.Status = "Pending"
+	// Create order manually
+	order := models.Order{
+		UserName:    fmt.Sprintf("%v", data["name"]),
+		Product:     fmt.Sprintf("%v", data["product"]),
+		PhoneNumber: fmt.Sprintf("%v", data["phone"]),
+		Status:      "Pending",
+	}
 
-	//  set current timestamp for CreatedAt
-
-	order.CreatedAt = time.Now()
+	// Quantity convert
+	if qty, ok := data["quantity"].(float64); ok {
+		order.Quantity = int(qty)
+	}
 
 	fmt.Printf("ORDER DATA: %+v\n", order)
 
-	// Save order
+	// Save
 	config.DB.Create(&order)
 
 	c.JSON(200, gin.H{

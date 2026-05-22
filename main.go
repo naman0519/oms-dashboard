@@ -20,6 +20,13 @@ func main() {
 	// DB connect
 	config.Connect()
 
+	admin := models.Admin{
+		Username: "admin",
+		Password: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy",
+	}
+
+	config.DB.FirstOrCreate(&admin, models.Admin{Username: "admin"})
+
 	// Migrate
 	config.DB.AutoMigrate(
 		&models.Order{},
