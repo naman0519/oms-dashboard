@@ -20,28 +20,33 @@ func CreateOrder(c *gin.Context) {
 	// JSON read
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(400, gin.H{
-			"error": "Invalid input",
+			"error": err.Error(),
 		})
 		return
 	}
 
-	// Create order manually
+	// Quantity convert
+	qty := 0
+	if q, ok := data["quantity"].(float64); ok {
+		qty = int(q)
+	}
+
+	// Create order
 	order := models.Order{
 		UserName:    fmt.Sprintf("%v", data["name"]),
 		Product:     fmt.Sprintf("%v", data["product"]),
 		PhoneNumber: fmt.Sprintf("%v", data["phone"]),
+		Quantity:    qty,
 		Status:      "Pending",
 	}
 
-	// Quantity convert
-	if qty, ok := data["quantity"].(float64); ok {
-		order.Quantity = int(qty)
+	// Save in DB
+	if err := config.DB.Create(&order).Error; err != nil {
+		c.JSON(500, gin.H{
+			"error": err.Error(),
+		})
+		return
 	}
-
-	fmt.Printf("ORDER DATA: %+v\n", order)
-
-	// Save
-	config.DB.Create(&order)
 
 	c.JSON(200, gin.H{
 		"message": "Order created successfully",
