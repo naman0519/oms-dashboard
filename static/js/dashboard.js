@@ -19,7 +19,8 @@ fetch('/orders')
             Product: order.Product || order.product || "",
             PhoneNumber: order.PhoneNumber || order.phoneNumber || "",
             Quantity: order.Quantity || order.quantity || 0,
-            Status: order.Status || order.status || "Pending"
+            Status: order.Status || order.status || "Pending",
+            CreatedAt: order.CreatedAt || order.created_at || "",
         }));
 
         // Initial Render
@@ -312,14 +313,5 @@ function filterOrdersByDate() {
 }
 
 function setTodayOrders() {
-
-    const today = new Date().toISOString().split('T')[0];
-
-    const filtered = allOrders.filter(order => {
-        if (!order.CreatedAt) return false;
-
-        return order.CreatedAt.startsWith(today);
-    });
-
-    renderOrders(filtered);
+    renderDashboard();
 }
