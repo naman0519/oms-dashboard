@@ -8,14 +8,14 @@ async function placeOrder() {
        let allOrders = [];
 
     const orderData = {
-    userName: document.getElementById("name").value,
+    name: document.getElementById("name").value,
     product: document.getElementById("product").value,
-    phoneNumber: document.getElementById("phone").value,
+    phone: document.getElementById("phone").value,
     quantity: parseInt(document.getElementById("qty").value)
 };
 
     try {
-        const res = await fetch("http://localhost:8080/order", {
+        const res = await fetch("/order", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

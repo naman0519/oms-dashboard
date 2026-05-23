@@ -312,6 +312,14 @@ function filterOrdersByDate() {
 }
 
 function setTodayOrders() {
-    filteredOrders = [...allOrders];
-    renderDashboard();
+
+    const today = new Date().toISOString().split('T')[0];
+
+    const filtered = allOrders.filter(order => {
+        if (!order.CreatedAt) return false;
+
+        return order.CreatedAt.startsWith(today);
+    });
+
+    renderOrders(filtered);
 }

@@ -60,7 +60,7 @@ func CreateOrder(c *gin.Context) {
 func GetOrders(c *gin.Context) {
 	var orders []models.Order
 
-	config.DB.Order("id desc").Find(&orders)
+	config.DB.Order("created_at desc").Find(&orders)
 
 	c.JSON(200, orders)
 }
