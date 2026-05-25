@@ -108,7 +108,7 @@ fetch('/low-stock-products')
     .then(res => res.json())
     .then(data => {
         alert(" Product Added Successfully");
-        location.reload();
+        loadDashboardAnalytics();
     });
 }
 
@@ -596,6 +596,8 @@ function filterOrdersByDate() {
 // ================================
 // renderOrdersTable() FUNCTION
 
+function renderOrdersTable(orders) {
+
 
 // Update Dashboard Cards According to Filtered Orders
 // ==========================
@@ -841,9 +843,10 @@ orders = orders.slice(start, end);
 
     tableBody.innerHTML = html;
 
+    renderPagination(allOrders.length);
+}
 
 
- 
 
 
 // ========================================
