@@ -360,7 +360,7 @@ function loadDashboardAnalytics() {
         renderOrdersTable(allOrders);
 
         // Date filter apply karo
-        setTodayOrders();
+        // setTodayOrders();
 
         // Approved orders only
         const approvedOrders = orders.filter(order =>
@@ -595,12 +595,8 @@ function filterOrdersByDate() {
 
 // ================================
 // renderOrdersTable() FUNCTION
-// ================================
-// static/app.js me is PURI function ko replace kar do
 
-function renderOrdersTable(orders) {
 
-    // ==========================
 // Update Dashboard Cards According to Filtered Orders
 // ==========================
 const totalOrdersElement = document.getElementById("totalOrders");
@@ -751,6 +747,15 @@ Promise.all([
     const tableBody = document.getElementById("orderTable");
     if (!tableBody) return;
 
+    // PAGINATION
+const start =
+    (currentPage - 1) * rowsPerPage;
+
+const end =
+    start + rowsPerPage;
+
+orders = orders.slice(start, end);
+
     let html = "";
 
     orders.forEach(order => {
@@ -836,9 +841,9 @@ Promise.all([
 
     tableBody.innerHTML = html;
 
-// Pagination buttons render karo
-renderPagination(orders.length);
-}
+
+
+ 
 
 
 // ========================================
@@ -919,18 +924,24 @@ function renderPagination(totalRows) {
 // GO TO PAGE
 // ========================================
 function goToPage(page) {
+
     currentPage = page;
 
-    // Current filters ko reapply karo
-    const searchInput = document.getElementById("orderSearch");
+    const searchInput =
+        document.getElementById("orderSearch");
 
-    if (searchInput && searchInput.value.trim() !== "") {
+    // Search active
+    if (
+        searchInput &&
+        searchInput.value.trim() !== ""
+    ) {
         searchOrders();
-    } else {
-        filterOrdersByDate();
+        return;
     }
-}
 
+    // Normal render
+    renderOrdersTable(allOrders);
+}
 
 
 // ========================================
