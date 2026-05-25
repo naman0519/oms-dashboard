@@ -28,7 +28,7 @@ async function placeOrder() {
                 name: customerName,
                 phone: customerPhone,
                 product: selectedProduct,
-                quantity: quantity
+                quantity: parseInt(quantity)
             })
         });
 
@@ -360,7 +360,7 @@ function loadDashboardAnalytics() {
         renderOrdersTable(allOrders);
 
         // Date filter apply karo
-        // setTodayOrders();
+        setTodayOrders();
 
         // Approved orders only
         const approvedOrders = orders.filter(order =>
@@ -557,15 +557,29 @@ function setTodayOrders() {
 
 // Filter orders by selected date
 function filterOrdersByDate() {
+
     const dateInput = document.getElementById("orderDateFilter");
+
     if (!dateInput) return;
 
     const selectedDate = dateInput.value;
 
-    const filteredOrders = allOrders.filter(order => {
-        const rawDate = order.CreatedAt || order.createdAt;
+    // Agar date select nahi hai
+    if (!selectedDate) {
+        renderOrdersTable(allOrders);
+        return;
+    }
 
-if (!rawDate) return false;
+    const filteredOrders = allOrders.filter(order => {
+
+        const rawDate =
+            order.CreatedAt ||
+            order.createdAt ||
+            order.UpdatedAt ||
+            order.updatedAt;
+
+        // Agar date nahi mili to order show karo
+        if (!rawDate) return true;
 
         const orderDate = new Date(rawDate)
             .toISOString()
