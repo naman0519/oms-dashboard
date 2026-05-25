@@ -5,32 +5,49 @@ let currentPage = 1;
 const rowsPerPage = 10;
 
 async function placeOrder() {
-       let allOrders = [];
 
-    const orderData = {
-    name: document.getElementById("name").value,
-    product: document.getElementById("product").value,
-    phone: document.getElementById("phone").value,
-    quantity: parseInt(document.getElementById("qty").value)
-};
+    const customerName = document.getElementById("customerName").value;
+    const customerPhone = document.getElementById("customerPhone").value;
+    const selectedProduct = document.getElementById("product").value;
+    const quantity = parseInt(document.getElementById("quantity").value);
+
+    if (!customerName || !customerPhone || !selectedProduct || !quantity) {
+        alert("Please fill all fields");
+        return;
+    }
 
     try {
-        const res = await fetch("/order", {
+
+        const res = await fetch("https://oms-dashboard.onrender.com/order", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(orderData)
+
+            body: JSON.stringify({
+                name: customerName,
+                phone: customerPhone,
+                product: selectedProduct,
+                quantity: quantity
+            })
         });
 
         const data = await res.json();
 
-        alert("Order placed successfully!");
-        console.log(data);
+        if (res.ok) {
+            alert("Order placed successfully");
+
+            document.getElementById("customerName").value = "";
+            document.getElementById("customerPhone").value = "";
+            document.getElementById("quantity").value = "";
+
+        } else {
+            alert(data.error || "Failed to place order");
+        }
 
     } catch (err) {
         console.error(err);
-        alert("Error placing order");
+        alert("Server error");
     }
 }
 
