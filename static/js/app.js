@@ -340,8 +340,10 @@ function loadDashboardAnalytics() {
         // Global orders store karo
         allOrders = orders;
 
+        renderOrdersTable(allOrders);
+
         // Date filter apply karo
-        setTodayOrders();
+        // setTodayOrders();
 
         // Approved orders only
         const approvedOrders = orders.filter(order =>
@@ -546,7 +548,7 @@ function filterOrdersByDate() {
     const filteredOrders = allOrders.filter(order => {
         const rawDate = order.CreatedAt || order.createdAt;
 
-        if (!rawDate) return true;
+if (!rawDate) return false;
 
         const orderDate = new Date(rawDate)
             .toISOString()

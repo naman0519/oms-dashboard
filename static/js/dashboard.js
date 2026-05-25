@@ -59,11 +59,18 @@ function renderDashboard() {
     const sortValue = sortElement ? sortElement.value : "";
 
     // Filter Orders
-    let filteredOrders = allOrders.filter(order =>
-        order.UserName.toLowerCase().includes(search) ||
-        order.Product.toLowerCase().includes(search) ||
-        order.PhoneNumber.toLowerCase().includes(search)
+   let filteredOrders = allOrders.filter(order => {
+
+    const user = (order.UserName || "").toLowerCase();
+    const product = (order.Product || "").toLowerCase();
+    const phone = (order.PhoneNumber || "").toLowerCase();
+
+    return (
+        user.includes(search) ||
+        product.includes(search) ||
+        phone.includes(search)
     );
+});
 
     // Apply Sorting
     switch (sortValue) {
