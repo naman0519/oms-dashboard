@@ -17,16 +17,17 @@ func CreateOrder(c *gin.Context) {
 
 	var data map[string]interface{}
 
-	// JSON read
+	// JSON bind
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(400, gin.H{
-			"error": err.Error(),
+			"error": "Invalid input",
 		})
 		return
 	}
 
-	// Quantity convert
+	// Quantity parse
 	qty := 0
+
 	if q, ok := data["quantity"].(float64); ok {
 		qty = int(q)
 	}
@@ -40,10 +41,12 @@ func CreateOrder(c *gin.Context) {
 		Status:      "Pending",
 	}
 
-	// Save in DB
-	if err := config.DB.Create(&order).Error; err != nil {
+	// Save to DB
+	result := config.DB.Create(&order)
+
+	if result.Error != nil {
 		c.JSON(500, gin.H{
-			"error": err.Error(),
+			"error": result.Error.Error(),
 		})
 		return
 	}
