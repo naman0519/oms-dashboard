@@ -40,7 +40,9 @@ func CreateOrder(c *gin.Context) {
 		return
 	}
 
-	c.Redirect(302, "https://oms-dashboard.onrender.com/dashboard")
+	c.JSON(200, gin.H{
+		"message": "Order placed successfully",
+	})
 }
 
 // ========================================
