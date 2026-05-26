@@ -269,7 +269,7 @@ function approveOrder(id) {
         }
 
         alert("✅ Order Approved Successfully");
-        location.reload();
+       loadDashboardAnalytics();
     })
     .catch(error => {
         console.error(error);
@@ -292,7 +292,7 @@ function rejectOrder(id) {
         }
 
         alert("❌ Order Rejected Successfully");
-        location.reload();
+        loadDashboardAnalytics();
     })
     .catch(error => {
         console.error(error);
@@ -360,7 +360,7 @@ function loadDashboardAnalytics() {
         renderOrdersTable(allOrders);
 
         // Date filter apply karo
-        // setTodayOrders();
+        setTodayOrders();
 
         // Approved orders only
         const approvedOrders = orders.filter(order =>
@@ -843,7 +843,7 @@ orders = orders.slice(start, end);
 
     tableBody.innerHTML = html;
 
-    renderPagination(allOrders.length);
+renderPagination(orders.length);
 }
 
 
