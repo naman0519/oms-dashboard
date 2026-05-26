@@ -15,33 +15,22 @@ import (
 // ========================================
 func CreateOrder(c *gin.Context) {
 
-	var data map[string]interface{}
+	name := c.PostForm("name")
+	product := c.PostForm("product")
+	phone := c.PostForm("phone")
+	quantity := c.PostForm("quantity")
 
-	// JSON bind
-	if err := c.ShouldBindJSON(&data); err != nil {
-		c.JSON(400, gin.H{
-			"error": "Invalid input",
-		})
-		return
-	}
+	var qty int
+	fmt.Sscanf(quantity, "%d", &qty)
 
-	// Quantity parse
-	qty := 0
-
-	if q, ok := data["quantity"].(float64); ok {
-		qty = int(q)
-	}
-
-	// Create order
 	order := models.Order{
-		UserName:    fmt.Sprintf("%v", data["name"]),
-		Product:     fmt.Sprintf("%v", data["product"]),
-		PhoneNumber: fmt.Sprintf("%v", data["phone"]),
+		UserName:    name,
+		Product:     product,
+		PhoneNumber: phone,
 		Quantity:    qty,
 		Status:      "Pending",
 	}
 
-	// Save to DB
 	result := config.DB.Create(&order)
 
 	if result.Error != nil {
@@ -51,10 +40,7 @@ func CreateOrder(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{
-		"message": "Order created successfully",
-		"order":   order,
-	})
+	c.Redirect(302, "https://oms-dashboard.onrender.com/dashboard")
 }
 
 // ========================================
